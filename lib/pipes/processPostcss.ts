@@ -17,7 +17,7 @@ export interface PostcssPipeResult {
  */
 export async function processPostcss(sassResult: sass.Result, entry: EntryConfig): Promise<PostcssPipeResult> {
   const from = sassResult.stats.entry;
-  const to = from.replace(entry.src, entry.out).replace(/\.scss$/, ".css");
+  const to = from.replace(entry.src, entry.out).replace(/\.(scss|sass)$/, ".css");
   const options: postcss.ProcessOptions = {
     from,
     to,

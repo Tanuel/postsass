@@ -8,7 +8,7 @@ import { EntryConfig } from "../../index";
  */
 export async function processSass(inPath: string, entry: EntryConfig): Promise<sass.Result> {
   const { sourceMap, outputStyle } = entry;
-  const outFile = inPath.replace(entry.src, entry.out).replace(/\.scss$/, ".css");
+  const outFile = inPath.replace(entry.src, entry.out).replace(/\.(scss|sass)$/, ".css");
   return sass.renderSync({
     file: inPath,
     outFile,
