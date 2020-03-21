@@ -1,0 +1,18 @@
+@use "partial";
+
+a {
+  b {
+    transition: all;
+  }
+
+  border-radius: 10px 5px;
+  background-color: rgba(100, 100, 255, 0.5);
+}
+
+#main {
+  display: grid;
+
+  .foot {
+    grid-area: foot;
+  }
+}

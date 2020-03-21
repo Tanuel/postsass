@@ -1,0 +1,12 @@
+.idea
+node_modules
+yarn_error.log
+dist
+
+# built files
+bin/*.js
+bin/*.d.ts
+lib/**/*.js
+lib/**/*.d.ts
+index.d.ts
+index.js
