@@ -4,10 +4,15 @@
   "bin": {
     "postsass": "bin/postsass.js"
   },
+  "author": {
+    "name": "Tanuel",
+    "url": "https://github.com/Tanuel",
+    "email": "tanuel.mategi@gmail.com"
+  },
   "description": "Compile scss/sass files via sass and postcss from cli",
   "license": "MIT",
   "main": "index.js",
-  "homepage": "https://github.de/Tanuel/postsass#readme",
+  "homepage": "https://github.com/Tanuel/postsass#readme",
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
@@ -24,7 +29,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.de/Tanuel/postsass.git"
+    "url": "https://github.com/Tanuel/postsass.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Tanuel/postsass/issues"
   },
   "files": [
     "lib/**/*.js",
