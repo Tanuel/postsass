@@ -14,7 +14,13 @@
     "clean": "tsc --build --clean"
   },
   "keywords": [
-    "css", "preprocessor", "sass", "scss", "postcss", "compiler", "cli"
+    "css",
+    "preprocessor",
+    "sass",
+    "scss",
+    "postcss",
+    "compiler",
+    "cli"
   ],
   "repository": {
     "type": "git",

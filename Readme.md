@@ -9,6 +9,10 @@ PostSass is a cli tool to build scss files via [dart-sass](https://github.com/sa
 
 ## Installation
 
+Requirements:
+* Node 12.x (Not tested for older versions)
+* yarn or npm
+
 Using yarn
 
     yarn add -D postsass
@@ -45,7 +49,7 @@ yarn postsass --dir scss:css --dir fonts
 | `--version`                          | -                          | Show version                                                                                                   |
 | `--dir`<br>`-d`                      | -                          | Read files from source and write them to the destination if specified<br> e.g. `--dir src` or `--dir src:dist` |
 | `--outputStyle`<br>`--style`<br>`-s` | `compressed` or `expanded` | output [style](https://sass-lang.com/documentation/cli/dart-sass#style) according to dart sass                 |
-| `--sourceMap`                        | `true` or `false`          |                                                                                                                |
+| `--sourceMap`                        | `true` or `false`          | generate sourcemaps                                                                                    |
 | `--context`                          | default: `process.cwd()`   | The working directory where to look for source files. Needs to be an absolute path                             |
 | `--watch`                            | -                          | Enable watch mode                                                                                              |
 
@@ -55,17 +59,22 @@ You can provide a file named `postsass.config.js` to provide configuration and p
 
 The file needs to be located in the working directory (`process.cwd()`)
 
+### Example
+
 ```javascript
 module.exports = {
   postcss: {
     plugins: [
-      require("autoprefixer")(),
+      require("autoprefixer")({ grid: "autoplace" }),
       require("oldie")({
-        /* options */
+        rgba: {
+          filter: true,
+        },
       }),
     ],
   },
 };
+
 ```
 
 ### Why not postcss.config.js?
