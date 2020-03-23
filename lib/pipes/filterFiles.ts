@@ -6,7 +6,7 @@ import * as path from "path";
  * but excludes partials, starting with _
  */
 export function filterFiles() {
-  return through2.obj(async function(item, enc, next) {
+  return through2.obj(async function (item, enc, next) {
     // include all scss files
     const isScss = path.extname(item.path) === ".scss";
     const isSass = path.extname(item.path) === ".sass";

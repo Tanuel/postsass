@@ -10,8 +10,9 @@ PostSass is a cli tool to build scss files via [dart-sass](https://github.com/sa
 ## Installation
 
 Requirements:
-* Node 12.x (Not tested for older versions)
-* yarn or npm
+
+- Node 12.x (Not tested for older versions)
+- yarn or npm
 
 Using yarn
 
@@ -49,7 +50,7 @@ yarn postsass --dir scss:css --dir fonts
 | `--version`                          | -                          | Show version                                                                                                   |
 | `--dir`<br>`-d`                      | -                          | Read files from source and write them to the destination if specified<br> e.g. `--dir src` or `--dir src:dist` |
 | `--outputStyle`<br>`--style`<br>`-s` | `compressed` or `expanded` | output [style](https://sass-lang.com/documentation/cli/dart-sass#style) according to dart sass                 |
-| `--sourceMap`                        | `true` or `false`          | generate sourcemaps                                                                                    |
+| `--sourceMap`                        | `true` or `false`          | generate sourcemaps                                                                                            |
 | `--context`                          | default: `process.cwd()`   | The working directory where to look for source files. Needs to be an absolute path                             |
 | `--watch`                            | -                          | Enable watch mode                                                                                              |
 
@@ -62,19 +63,33 @@ The file needs to be located in the working directory (`process.cwd()`)
 ### Example
 
 ```javascript
+const path = require("path");
+const autoprefixer = require("autoprefixer");
+const oldie = require("oldie");
+const postcssUrl = require("postcss-url");
+
 module.exports = {
+  sass: {
+    includePaths: [path.dirname(require.resolve("modern-normalize"))],
+  },
   postcss: {
     plugins: [
-      require("autoprefixer")({ grid: "autoplace" }),
-      require("oldie")({
+      autoprefixer({ grid: "autoplace" }),
+      oldie({
         rgba: {
           filter: true,
         },
       }),
     ],
+    // when using the "use" property, you can pass callbacks to configure plugins at compile time
+    // "from" gives you the source filename
+    // "to" gives you the destination filename
+    use: [
+      // example: inline svg files, resolve relatively to file
+      ({ from, to }) => postcssUrl({ filter: /\.svg$/, url: "inline", basePath: path.dirname(from) }),
+    ],
   },
 };
-
 ```
 
 ### Why not postcss.config.js?

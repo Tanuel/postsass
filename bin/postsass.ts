@@ -14,7 +14,7 @@ import yargs from "yargs";
 const chain = yargs.command(
   ["*"],
   "Compiler",
-  yargs => {
+  (yargs) => {
     yargs
       .usage(
         [
@@ -72,7 +72,7 @@ chain.command(
   "clean",
   "Clean output",
   () => {},
-  argv => {
+  (argv) => {
     console.warn("Not implemented yet");
   }
 );

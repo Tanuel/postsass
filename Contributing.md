@@ -7,10 +7,11 @@ Keep changes simple and don't try to do thousand things at once ;)
 
 ## Setup
 
-Fork and clone the repository, then 
-* run `yarn install` to set up dependencies
-* run `yarn build` to compile typescript files to javascript
-* go into the examples directory, run `yarn install`, then `yarn test`
+Fork and clone the repository, then
+
+- run `yarn install` to set up dependencies
+- run `yarn build` to compile typescript files to javascript
+- go into the examples directory, run `yarn install`, then `yarn test`
 
 ## Commit Guidelines
 

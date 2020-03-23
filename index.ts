@@ -5,6 +5,7 @@ import { filterFiles } from "./lib/pipes/filterFiles";
 import { PostcssPipeResult } from "./lib/pipes/processPostcss";
 import { getErrorCollector } from "./lib/util/error-collector";
 import { compileFile, compilerPipe } from "./lib/compilerPipe";
+import { Options as SassOptions } from "sass";
 
 type OutputStyle = "compressed" | "expanded";
 
@@ -27,15 +28,14 @@ export interface EntryConfig {
   outRelative: string;
   src: string;
   out: string;
-  sourceMap: boolean;
-  outputStyle: OutputStyle;
-  postcssConfig: any;
+  postsassConfig: {
+    postcss: any;
+    sass: SassOptions;
+  };
 }
 
 // A map of which file is a dependency of another file
 const relationships: { [key: string]: string[] } = {};
-
-let postcssConfig = {};
 
 /**
  * Compile scss files
@@ -46,19 +46,9 @@ export async function compile(params: Params) {
   console.info(chalk.blue.bold("Using output style"), chalk.green(outputStyle));
   console.info(chalk.blue.bold("Source Map"), chalk.green(sourceMap));
 
-  try {
-    postcssConfig = await import(path.resolve(process.cwd(), "postsass.config"));
-  } catch (e) {
-    console.warn("No postcss config file found");
-  }
-
-  // set global options
-  const options = {
-    sourceMap,
-    outputStyle,
-  };
+  let postsassConfig = await loadConfig(params);
   // create a configuration for each entry directory
-  const entries: EntryConfig[] = dir.map(d => {
+  const entries: EntryConfig[] = dir.map((d) => {
     // split at semicolon
     const split = d.split(":", 2);
 
@@ -67,18 +57,17 @@ export async function compile(params: Params) {
     const out = split[1] ?? split[0];
     // create a configuration for the entry dir
     const conf: EntryConfig = {
-      ...options,
       srcRelative: src,
       outRelative: out,
       src: path.resolve(context, src),
       out: path.resolve(context, out),
-      postcssConfig,
+      postsassConfig,
     };
     return conf;
   });
   // create promises for each entry
   const cbs = entries.map(
-    async entry =>
+    async (entry) =>
       new Promise((resolve, reject) => {
         const { srcRelative, outRelative, src } = entry;
         console.info(
@@ -111,7 +100,7 @@ export async function compile(params: Params) {
   const errors = getErrorCollector();
   if (errors.hasErrors()) {
     console.error(chalk.bold.red("Erorrs occured while compiling:"));
-    errors.forEach(e => console.error(e.message));
+    errors.forEach((e) => console.error(e.message));
     process.exitCode = 2;
     return;
   }
@@ -148,7 +137,7 @@ function dataListener(params: Params, entry: EntryConfig) {
 // when a file is changed, all its dependants should be updated
 // includedFiles includes the entry file as well
 function relationTracker(d: PostcssPipeResult) {
-  d.sassResult.stats.includedFiles.forEach(f => {
+  d.sassResult.stats.includedFiles.forEach((f) => {
     if (!(f in relationships)) {
       relationships[f] = [];
     } else if (relationships[f].indexOf(d.from) === -1) relationships[f].push(d.from);
@@ -162,7 +151,7 @@ async function enableWatchMode(params: Params, entries: EntryConfig[]) {
     console.info(chalk.bold.cyan("Starting Watch Mode"));
 
     // Start watcher for every source set
-    const promises = entries.map(entry => {
+    const promises = entries.map((entry) => {
       return new Promise((resolve, reject) => {
         // create a pattern to watch all scss files
         const watchPattern = path.resolve(params.context, entry.srcRelative, "**/*.scss");
@@ -173,7 +162,7 @@ async function enableWatchMode(params: Params, entries: EntryConfig[]) {
             console.info(chalk.bold(chalk.blue("Watching changes for"), chalk.magenta(entry.srcRelative)))
           )
           // Show a little info when a file has been removed
-          .on("unlink", path => console.info(chalk.red(`File ${path} has been removed`)))
+          .on("unlink", (path) => console.info(chalk.red(`File ${path} has been removed`)))
           // register the change handler
           .on("change", changeHandler(entry));
         process.on("SIGINT", () => {
@@ -206,4 +195,28 @@ function changeHandler(entry: EntryConfig) {
       }
     }
   };
+}
+
+async function loadConfig(params: Params): Promise<EntryConfig["postsassConfig"]> {
+  const sassCliConfig = { outputStyle: params.outputStyle, sourceMap: params.sourceMap };
+  let fileConfig;
+  const builder = {
+    postcss: null,
+    sass: sassCliConfig,
+  };
+  try {
+    fileConfig = await import(path.resolve(process.cwd(), "postsass.config.js"));
+    if (typeof fileConfig.postcss === "object") {
+      builder.postcss = fileConfig.postcss;
+    }
+    if (typeof fileConfig.sass === "object") {
+      builder.sass = { ...fileConfig.sass, ...sassCliConfig };
+    }
+  } catch (e) {
+    console.warn("No postsass config file found");
+    if (!e.code) {
+      console.error(e);
+    }
+  }
+  return builder;
 }

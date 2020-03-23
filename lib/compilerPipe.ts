@@ -7,7 +7,7 @@ import chalk from "chalk";
 import { addError } from "./util/error-collector";
 
 export function compilerPipe(entry: EntryConfig) {
-  return through2.obj(async function(item, enc, next) {
+  return through2.obj(async function (item, enc, next) {
     const inPath = item.path;
     try {
       const result = await compileFile(inPath, entry);

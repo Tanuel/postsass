@@ -46,10 +46,10 @@
     "chalk": "3.0.0",
     "chokidar": "3.3.1",
     "klaw": "3.0.0",
-    "through2": "3.0.1",
-    "yargs": "15.3.1",
     "postcss": "7.0.27",
-    "sass": "1.26.3"
+    "sass": "1.26.3",
+    "through2": "3.0.1",
+    "yargs": "15.3.1"
   },
   "devDependencies": {
     "@types/klaw": "3.0.0",
@@ -57,7 +57,7 @@
     "@types/through2": "2.0.34",
     "@types/yargs": "15.0.4",
     "husky": "4.2.3",
-    "prettier": "1.19.1",
+    "prettier": "2.0.1",
     "pretty-quick": "2.0.1",
     "ts-node": "8.7.0",
     "typescript": "3.8.3"

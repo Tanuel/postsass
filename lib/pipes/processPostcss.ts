@@ -1,5 +1,5 @@
 import sass from "sass";
-import postcss from "postcss";
+import postcss, { AcceptedPlugin } from "postcss";
 import { EntryConfig } from "../../index";
 
 export interface PostcssPipeResult {
@@ -8,6 +8,13 @@ export interface PostcssPipeResult {
   from: string;
   to: string;
 }
+
+export interface PostcssUseParams {
+  from: string;
+  to: string;
+}
+
+type PostcssUse = (p: PostcssUseParams) => AcceptedPlugin;
 
 /**
  * Process a single sass Result and return an object
@@ -30,7 +37,24 @@ export async function processPostcss(sassResult: sass.Result, entry: EntryConfig
     };
   }
 
-  const result = await postcss(entry.postcssConfig.postcss?.plugins ?? []).process(sassResult.css, options);
+  const conf = entry.postsassConfig.postcss;
+  let processor = postcss(conf?.plugins ?? []);
+
+  if (Array.isArray(conf?.use)) {
+    const useParams: PostcssUseParams = {
+      from,
+      to,
+    };
+    conf.use.forEach((u: PostcssUse | AcceptedPlugin) => {
+      if (typeof u === "function") {
+        processor = processor.use((u as PostcssUse)(useParams));
+      } else {
+        processor = processor.use(u);
+      }
+    });
+  }
+
+  const result = await processor.process(sassResult.css, options);
 
   return {
     result,
