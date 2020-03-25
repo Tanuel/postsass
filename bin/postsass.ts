@@ -52,11 +52,12 @@ const chain = yargs.command(
         type: "boolean",
         description: "Enable watch mode to recompile on changes",
         default: false,
+      })
+      .option("debug", {
+        type: "boolean",
+        description: "Log additional debug info to process.cwd()/_postsassDebug",
+        default: false,
       });
-    // .alias({
-    //   style: "outputStyle",
-    //   s: "outputStyle",
-    // })
   },
   // If we don't exit the process here, the terminal gets stuck where the arrow keys print ^[[A,^[[B etc...
   // If you know how to fix this, feel free.

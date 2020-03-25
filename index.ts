@@ -6,6 +6,7 @@ import { PostcssPipeResult } from "./lib/pipes/processPostcss";
 import { getErrorCollector } from "./lib/util/error-collector";
 import { compileFile, compilerPipe } from "./lib/compilerPipe";
 import { Options as SassOptions } from "sass";
+import { writeFile } from "./lib/util/fs-util";
 
 type OutputStyle = "compressed" | "expanded";
 
@@ -18,6 +19,7 @@ export interface Params {
   outputStyle: OutputStyle;
   sourceMap: boolean;
   watch: boolean;
+  debug: boolean;
 }
 
 /**
@@ -36,6 +38,8 @@ export interface EntryConfig {
 
 // A map of which file is a dependency of another file
 const relationships: { [key: string]: string[] } = {};
+
+const debugDir = path.resolve(process.cwd(), "_postsassDebug");
 
 /**
  * Compile scss files
@@ -105,6 +109,11 @@ export async function compile(params: Params) {
     return;
   }
 
+  // Write debug info if enabled
+  if (params.debug) {
+    await writeFile(path.resolve(debugDir, "relationships.json"), JSON.stringify(relationships, null, 2));
+  }
+
   console.info(chalk.bold.green("All files compiled successfully!"));
   // Are we done yet?
   if (watch) {
@@ -119,7 +128,7 @@ export async function compile(params: Params) {
  * Show a bit of info what should
  */
 function dataListener(params: Params, entry: EntryConfig) {
-  return (d: PostcssPipeResult) => {
+  return async (d: PostcssPipeResult) => {
     console.info(
       chalk.bold(
         chalk.blue(d.from.replace(entry.src, entry.srcRelative)),
@@ -127,12 +136,20 @@ function dataListener(params: Params, entry: EntryConfig) {
         chalk.blue(d.to.replace(entry.out, entry.outRelative))
       )
     );
-
-    if (params.watch) {
+    // write debug info: which parts are a part of the file
+    // FIXME: Use a better ouput filename to avoid collisions
+    if (params.debug) {
+      await writeFile(
+        path.resolve(debugDir, "relations", path.basename(d.from) + ".json"),
+        JSON.stringify(d.sassResult.stats.includedFiles, null, 2)
+      );
+    }
+    if (params.watch || params.debug) {
       relationTracker(d);
     }
   };
 }
+
 // track the dependency relations between files
 // when a file is changed, all its dependants should be updated
 // includedFiles includes the entry file as well
