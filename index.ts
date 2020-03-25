@@ -140,7 +140,10 @@ function relationTracker(d: PostcssPipeResult) {
   d.sassResult.stats.includedFiles.forEach((f) => {
     if (!(f in relationships)) {
       relationships[f] = [];
-    } else if (relationships[f].indexOf(d.from) === -1) relationships[f].push(d.from);
+      relationships[f].push(d.from);
+    } else if (relationships[f].indexOf(d.from) === -1) {
+      relationships[f].push(d.from);
+    }
   });
 }
 
