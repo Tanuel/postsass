@@ -52,7 +52,7 @@
     "yargs": "15.3.1"
   },
   "devDependencies": {
-    "@types/klaw": "3.0.0",
+    "@types/klaw": "3.0.1",
     "@types/sass": "1.16.0",
     "@types/through2": "2.0.34",
     "@types/yargs": "15.0.4",
