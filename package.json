@@ -57,7 +57,7 @@
     "@types/through2": "2.0.34",
     "@types/yargs": "15.0.4",
     "husky": "4.2.4",
-    "prettier": "2.0.3",
+    "prettier": "2.0.4",
     "pretty-quick": "2.0.1",
     "typescript": "3.8.3"
   },
