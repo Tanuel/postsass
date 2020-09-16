@@ -46,7 +46,7 @@
     "chalk": "4.1.0",
     "chokidar": "3.4.1",
     "klaw": "3.0.0",
-    "postcss": "7.0.32",
+    "postcss": "8.0.4",
     "sass": "1.26.10",
     "through2": "4.0.2",
     "yargs": "15.4.1"
