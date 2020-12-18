@@ -1,9 +1,9 @@
 import sass from "sass";
-import postcss, { AcceptedPlugin } from "postcss";
+import postcss, { AcceptedPlugin, Result as PostcssResult, ProcessOptions as PostcssProcessOptions } from "postcss";
 import { EntryConfig } from "../../index";
 
 export interface PostcssPipeResult {
-  result: postcss.Result;
+  result: PostcssResult;
   sassResult: sass.Result;
   from: string;
   to: string;
@@ -25,7 +25,7 @@ type PostcssUse = (p: PostcssUseParams) => AcceptedPlugin;
 export async function processPostcss(sassResult: sass.Result, entry: EntryConfig): Promise<PostcssPipeResult> {
   const from = sassResult.stats.entry;
   const to = from.replace(entry.src, entry.out).replace(/\.(scss|sass)$/, ".css");
-  const options: postcss.ProcessOptions = {
+  const options: PostcssProcessOptions = {
     from,
     to,
   };

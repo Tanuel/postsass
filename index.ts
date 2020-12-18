@@ -172,7 +172,7 @@ async function enableWatchMode(params: Params, entries: EntryConfig[]) {
 
     // Start watcher for every source set
     const promises = entries.map((entry) => {
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         // create a pattern to watch all scss files
         const watchPattern = path.resolve(params.context, entry.srcRelative, "**/*.scss");
         const watcher = chokidar.watch(watchPattern);
