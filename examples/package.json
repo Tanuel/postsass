@@ -3,10 +3,10 @@
     "test": "node ../bin/postsass.js --dir sass:dist/sass --dir scss:dist/scss --outputStyle expanded"
   },
   "dependencies": {
-    "autoprefixer": "9.7.4",
+    "autoprefixer": "10.1.0",
     "node-sass-tilde-importer": "1.0.2",
-    "modern-normalize": "0.6.0",
+    "modern-normalize": "1.0.0",
     "oldie": "1.3.0",
-    "postcss-url": "8.0.0"
+    "postcss-url": "10.1.1"
   }
 }

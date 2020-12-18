@@ -43,13 +43,13 @@
     "index.js"
   ],
   "dependencies": {
-    "chalk": "4.1.0",
-    "chokidar": "3.4.1",
-    "klaw": "3.0.0",
-    "postcss": "7.0.32",
-    "sass": "1.26.10",
-    "through2": "4.0.2",
-    "yargs": "15.4.1"
+    "chalk": "^4.1.0",
+    "chokidar": "^3.4.1",
+    "klaw": "^3.0.0",
+    "postcss": "^8.2.0",
+    "sass": "^1.26.10",
+    "through2": "^4.0.2",
+    "yargs": "^15.4.1"
   },
   "devDependencies": {
     "@types/klaw": "3.0.1",
