@@ -6,7 +6,7 @@ import { EntryConfig } from "../../index";
  * @param inPath
  * @param entry
  */
-export async function processSass(inPath: string, entry: EntryConfig): Promise<sass.Result> {
+export async function processSass(inPath: string, entry: EntryConfig): Promise<sass.LegacyResult> {
   const outFile = inPath.replace(entry.src, entry.out).replace(/\.(scss|sass)$/, ".css");
   return sass.renderSync({
     ...entry.postsassConfig.sass,

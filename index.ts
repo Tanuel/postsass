@@ -5,7 +5,7 @@ import { filterFiles } from "./lib/pipes/filterFiles";
 import { PostcssPipeResult } from "./lib/pipes/processPostcss";
 import { getErrorCollector } from "./lib/util/error-collector";
 import { compileFile, compilerPipe } from "./lib/compilerPipe";
-import { Options as SassOptions } from "sass";
+import { LegacyOptions as SassOptions } from "sass";
 import { writeFile } from "./lib/util/fs-util";
 
 type OutputStyle = "compressed" | "expanded";
@@ -32,7 +32,7 @@ export interface EntryConfig {
   out: string;
   postsassConfig: {
     postcss: any;
-    sass: SassOptions;
+    sass: SassOptions<'sync'>;
   };
 }
 
@@ -94,7 +94,7 @@ export async function compile(params: Params) {
   try {
     // Wait until all files are processed
     await Promise.all(cbs);
-  } catch (e) {
+  } catch(e : any) {
     console.error(chalk.red(chalk.bold("Error occured:"), e.message));
     console.error(e.stack);
     process.exitCode = 1;
@@ -154,7 +154,7 @@ function dataListener(params: Params, entry: EntryConfig) {
 // when a file is changed, all its dependants should be updated
 // includedFiles includes the entry file as well
 function relationTracker(d: PostcssPipeResult) {
-  d.sassResult.stats.includedFiles.forEach((f) => {
+  d.sassResult.stats.includedFiles.forEach((f: string) => {
     if (!(f in relationships)) {
       relationships[f] = [];
       relationships[f].push(d.from);
@@ -191,7 +191,7 @@ async function enableWatchMode(params: Params, entries: EntryConfig[]) {
       });
     });
     return Promise.all(promises);
-  } catch (e) {
+  } catch(e : any) {
     console.error(e);
     return;
   }
@@ -209,7 +209,7 @@ function changeHandler(entry: EntryConfig) {
           console.info(
             chalk.bold(chalk.blue("Updated file", chalk.magenta(write.from.replace(entry.src, entry.srcRelative))))
           );
-        } catch (e) {
+        } catch(e : any) {
           console.error(chalk.bold.red("Error when compiling", p), e.message);
         }
       }
@@ -218,7 +218,7 @@ function changeHandler(entry: EntryConfig) {
 }
 
 async function loadConfig(params: Params): Promise<EntryConfig["postsassConfig"]> {
-  const sassCliConfig = { outputStyle: params.outputStyle, sourceMap: params.sourceMap };
+  const sassCliConfig = { outputStyle: params.outputStyle, sourceMap: params.sourceMap } as SassOptions<'sync'>;
   let fileConfig;
   const builder = {
     postcss: null,
@@ -232,7 +232,7 @@ async function loadConfig(params: Params): Promise<EntryConfig["postsassConfig"]
     if (typeof fileConfig.sass === "object") {
       builder.sass = { ...fileConfig.sass, ...sassCliConfig };
     }
-  } catch (e) {
+  } catch(e : any) {
     console.warn("No postsass config file found");
     if (!e.code) {
       console.error(e);
