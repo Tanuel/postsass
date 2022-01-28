@@ -23,7 +23,7 @@ export async function writeResult(i: PostcssPipeResult, entry: EntryConfig) {
   const { css, map } = getOut(src, out, i.from);
   await writeFile(css, i.result.css);
   if (i.result.map) {
-    await writeFile(map, i.result.map);
+    await writeFile(map, typeof i.result.map === 'object' ? i.result.map.toString() : i.result.map);
   }
   return i;
 }
