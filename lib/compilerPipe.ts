@@ -12,7 +12,7 @@ export function compilerPipe(entry: EntryConfig) {
     try {
       const result = await compileFile(inPath, entry);
       this.push(result);
-    } catch (e) {
+    } catch(e: any) {
       console.error(chalk.red("Error in", item.path));
       addError(e);
     }

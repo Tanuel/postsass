@@ -12,7 +12,7 @@ export async function writeFile(filepath: string, data: any) {
     if (!stat.isDirectory()) {
       await fs.mkdir(dir, { recursive: true });
     }
-  } catch (e) {
+  } catch(e: any) {
     if (e.code === "ENOENT") {
       await fs.mkdir(dir, { recursive: true });
     } else {
