@@ -55,7 +55,7 @@
     "@types/klaw": "3.0.1",
     "@types/sass": "1.16.0",
     "@types/through2": "2.0.36",
-    "@types/yargs": "15.0.5",
+    "@types/yargs": "15.0.19",
     "husky": "4.2.5",
     "prettier": "2.0.5",
     "pretty-quick": "2.0.1",
